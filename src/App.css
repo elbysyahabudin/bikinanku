@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@keyframes slideDown {
+  0% {
+      top: -200px; /* Start from above the screen */
+  }
+  100% {
+      top: 0; /* End at the original position */
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown .2s forwards;
+}
