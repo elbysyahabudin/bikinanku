@@ -7,57 +7,53 @@ import SubMenuKategori from './components/SubeMenuKategori';
 
 function App() {
   const [isSubmenuKategoriVisible, setSubmenuKategoriVisible] = useState(false);
-  const menuKategori = useRef(null);
+  const [bgColor, setBgColor] = useState('');
 
   const handleMouseOverProduk = () => {
     setSubmenuKategoriVisible(true);
+    setBgColor('bg-blue-600');
+    console.log("Entering");
   };
+  const handleMouseLeaveAll = (event) => {
+    setSubmenuKategoriVisible(false);
+    setBgColor('');
+  }
+  const handleMouseLeave = (event) => {
 
-  const handleMouseLeave = (e) => {
-    if (menuKategori.current) 
-    {  // Check if menuKategori has been assigned a DOM element
-      const rect = menuKategori.current.getBoundingClientRect();
-      
-      if (e.clientX <= rect.left) 
-      {
-        setSubmenuKategoriVisible(false);
-      }
-      else if (e.clientX >= rect.right)
-      {
-        setSubmenuKategoriVisible(false);
-      }
-      else if (e.clientY <= rect.top) 
-      {
-        console.log("top");
-        setSubmenuKategoriVisible(false);
-      }
-      else   
-      {
-        console.log("botom");
-        setSubmenuKategoriVisible(true);
-      }
+    const rect = event.currentTarget.getBoundingClientRect();
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    if(mouseY <= rect.top ){
+      console.log("Leaving Top" );
+      setSubmenuKategoriVisible(false);
+      setBgColor('');
     }
+    else if (mouseX <= rect.left){
+      console.log("Leaving left" );
+      setSubmenuKategoriVisible(false);
+      setBgColor('');
+    }
+    else if( mouseX >= rect.right) {
+      console.log("Leaving right" );
+      setSubmenuKategoriVisible(false);
+      setBgColor('');
+    }
+   
   };
   
   
-  
-
   return (
     <>
-      <div className='bg-gray-900 h-20 flex justify-between items-center p-2.5'>
+      <div className='bg-gray-900 h-20 flex justify-between items-center'>
         <img src={bikinankuLogo} className='h-15' />
-        <div className="flex items-center gap-5">
-          <div
-            ref={menuKategori}
-            className='text-white cursor-pointer'
-            onMouseEnter={handleMouseOverProduk}
-            // onMouseOut={handleMouseOutProduk}
-            onMouseLeave={handleMouseLeave}
-          >
-            Kategori
-          </div>
+        <div className="flex items-center h-full justify-center gap-5"> {/* Kategori and search Wrapper */}
 
-          <div className="relative">
+          <div onMouseLeave={handleMouseLeave} className='h-full w-20 flex justify-center items-center'>
+            <div onMouseEnter={handleMouseOverProduk} onMouseLeave={handleMouseLeave} className={`text-white text-center ${bgColor} p-2 rounded-lg cursor-pointer`}>Kategori</div>  
+          </div> {/* Kategori Wrapper */}
+
+          <div className="relative">  {/* Search Wrapper */}
             <input
               type='text'
               placeholder='Cari..'
@@ -65,6 +61,7 @@ function App() {
             />
             <FontAwesomeIcon icon={faMagnifyingGlass} className="text-white absolute left-3 top-1/2 transform -translate-y-1/2" />
           </div>
+
         </div>
 
         <div className='flex gap-5 align-middle'>
@@ -76,7 +73,7 @@ function App() {
         </div>
       </div>
 
-      <SubMenuKategori isVisible={isSubmenuKategoriVisible} onLeave={handleMouseLeave} />
+      <SubMenuKategori isVisible={isSubmenuKategoriVisible} onLeave={handleMouseLeaveAll} />
       <div className="content">
         Ini adalah content
       </div>
